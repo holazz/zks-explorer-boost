@@ -1,0 +1,30 @@
+.transactions-table .tablet-column-hidden {
+  display: none;
+}
+.transactions-table .tablet-column {
+  display: table-cell;
+}
+
+.transactions-table .tablet-column-hidden {
+  display: none;
+}
+.transactions-table .tablet-column {
+  display: table-cell;
+}
+
+td[data-heading="Fee"] {
+  display: table-cell !important;
+}
+td.tablet-column-hidden[data-heading="Amount"] {
+  display: table-cell !important;
+}
+td.tablet-column[data-heading="Amount"] {
+  display: none !important;
+}
+
+.account-tables-container + div table th:nth-child(9) {
+  display: table-cell !important;
+}
+.account-tables-container + div table th:nth-child(10) {
+  display: none !important;
+}

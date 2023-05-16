@@ -1,0 +1,36 @@
+{
+  "name": "zks-explorer-boost",
+  "displayName": "zkSync Explorer Boost",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "description": "zkSync Explorer Boost",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "pack": "vite build && crx pack dist -o ./dist/extension.crx",
+    "start": "web-ext run --source-dir ./dist --target=chromium",
+    "lint": "eslint .",
+    "release": "bumpp --commit --push --tag"
+  },
+  "dependencies": {
+    "ethers": "^6.3.0",
+    "vue": "^3.3.2",
+    "vue-tippy": "^6.1.2"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.17",
+    "@holazz/eslint-config": "^1.4.7",
+    "@holazz/eslint-config-prettier": "^1.4.7",
+    "@types/chrome": "^0.0.235",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "bumpp": "^9.1.0",
+    "crx": "^5.0.1",
+    "eslint": "^8.40.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5",
+    "web-ext": "^7.6.2"
+  }
+}
