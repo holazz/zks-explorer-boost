@@ -107,6 +107,7 @@ export function render(data: Data) {
 
       createApp(GasLimitCell, {
         value: list[i].gasLimit,
+        status: list[i].status,
       }).mount(gasLimitCell)
     }
   }
@@ -140,6 +141,7 @@ export function render(data: Data) {
 
       createApp(GasLimitCell, {
         value: list[i].gasLimit,
+        status: list[i].status,
       }).mount(gasLimitCell)
     }
   }

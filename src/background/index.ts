@@ -13,7 +13,7 @@ chrome.webRequest.onCompleted.addListener(
 
       const data = await Promise.all(
         txs.map(async (tx: Record<string, any>) => {
-          const { transactionHash, balanceChanges, fee } = tx
+          const { transactionHash, status, balanceChanges, fee } = tx
           const ethPrice = balanceChanges.find(
             (item: Record<string, any>) => item.type === 'fee'
           ).tokenInfo.usdPrice
@@ -26,6 +26,7 @@ chrome.webRequest.onCompleted.addListener(
 
           return {
             transactionHash,
+            status,
             feeETH,
             feeUSD,
             gasLimit,
