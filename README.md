@@ -10,6 +10,8 @@
 
 1. Navigate to the [Releases](https://github.com/holazz/zks-explorer-boost/releases) section, download the latest version of the extension, and unzip it.
 
+<img src="./screenshots/extension.png" height="150" />
+
 2. Open `chrome://extensions/` and Enable **Developer Mode**.
 
 3. Click **Load Unpacked** and select the folder you just unzipped.
