@@ -2,7 +2,7 @@ export interface Tx {
   transactionHash: string
   status: 'included' | 'verified' | 'failed'
   feeETH: number
-  feeUSD: string
+  feeUSD: number
   gasLimit: number
 }
 

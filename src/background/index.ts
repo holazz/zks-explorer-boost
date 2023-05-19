@@ -1,7 +1,12 @@
-import { JsonRpcProvider, formatEther } from 'ethers'
+import { createPublicClient, formatEther, http } from 'viem'
+import { zkSync, zkSyncTestnet } from 'viem/chains'
+import {
+  MAINNET_API_URL,
+  MAINNET_EXPLORER_URL,
+  TESTNET_API_URL,
+  TESTNET_EXPLORER_URL,
+} from '../constant'
 import type { Data, Tx } from '../types'
-
-const provider = new JsonRpcProvider('https://mainnet.era.zksync.io')
 
 chrome.webRequest.onCompleted.addListener(
   async (details) => {
@@ -11,18 +16,25 @@ chrome.webRequest.onCompleted.addListener(
       const res = await fetch(url)
       const txs = (await res.json()).list || []
 
+      const client = createPublicClient({
+        chain: url.startsWith(MAINNET_API_URL) ? zkSync : zkSyncTestnet,
+        transport: http(),
+      })
+
       const data = await Promise.all(
         txs.map(async (tx: Record<string, any>) => {
           const { transactionHash, status, balanceChanges, fee } = tx
-          const ethPrice = balanceChanges.find(
-            (item: Record<string, any>) => item.type === 'fee'
-          ).tokenInfo.usdPrice
+          const ethPrice = Number(
+            balanceChanges.find(
+              (item: Record<string, any>) => item.type === 'fee'
+            )?.tokenInfo.usdPrice || 0
+          )
 
-          const feeETH = Number(formatEther(fee))
-          const feeUSD = (feeETH * ethPrice).toFixed(2)
+          const feeETH = Number(formatEther(BigInt(fee)))
+          const feeUSD = Number((feeETH * ethPrice).toFixed(2))
 
-          const res = await provider.getTransaction(transactionHash)
-          const gasLimit = Number(res?.gasLimit)
+          const res = await client.getTransaction({ hash: transactionHash })
+          const gasLimit = Number(res?.gas)
 
           return {
             transactionHash,
@@ -39,9 +51,19 @@ chrome.webRequest.onCompleted.addListener(
       const address =
         urlParams.get('accountAddress') || urlParams.get('contractAddress')
 
-      const [tab] = await chrome.tabs.query({
-        url: `https://explorer.zksync.io/address/${address}*`,
+      let [tab] = await chrome.tabs.query({
+        url: url.startsWith(MAINNET_API_URL)
+          ? `${MAINNET_EXPLORER_URL}/address/${address}*`
+          : `${TESTNET_EXPLORER_URL}/address/${address}*`,
       })
+
+      if (!tab) {
+        ;[tab] = await chrome.tabs.query({
+          url: url.startsWith(MAINNET_API_URL)
+            ? `${MAINNET_EXPLORER_URL}/address/${address?.toLowerCase()}*`
+            : `${TESTNET_EXPLORER_URL}/address/${address?.toLowerCase()}*`,
+        })
+      }
 
       await chrome.tabs.sendMessage(tab.id!, {
         address,
@@ -50,5 +72,10 @@ chrome.webRequest.onCompleted.addListener(
       } as Data)
     }
   },
-  { urls: ['https://zksync2-mainnet-explorer.zksync.io/transactions*'] }
+  {
+    urls: [
+      `${MAINNET_API_URL}/transactions*`,
+      `${TESTNET_API_URL}/transactions*`,
+    ],
+  }
 )

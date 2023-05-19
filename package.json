@@ -15,7 +15,7 @@
     "release": "bumpp --commit --push --tag"
   },
   "dependencies": {
-    "ethers": "^6.3.0",
+    "viem": "^0.3.31",
     "vue": "^3.3.2",
     "vue-tippy": "^6.1.2"
   },

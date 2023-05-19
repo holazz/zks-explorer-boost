@@ -1,5 +1,11 @@
 import { defineManifest } from '@crxjs/vite-plugin'
 import pkg from '../package.json'
+import {
+  MAINNET_API_URL,
+  MAINNET_EXPLORER_URL,
+  TESTNET_API_URL,
+  TESTNET_EXPLORER_URL,
+} from './constant'
 
 export default defineManifest({
   manifest_version: 3,
@@ -9,8 +15,10 @@ export default defineManifest({
   homepage_url: 'https://github.com/holazz/zks-explorer-boost',
   permissions: ['webRequest'],
   host_permissions: [
-    'https://explorer.zksync.io/address/*',
-    'https://zksync2-mainnet-explorer.zksync.io/*',
+    `${MAINNET_EXPLORER_URL}/address/*`,
+    `${MAINNET_API_URL}/*`,
+    `${TESTNET_EXPLORER_URL}/address/*`,
+    `${TESTNET_API_URL}/*`,
   ],
   background: {
     service_worker: 'src/background/index.ts',
@@ -22,7 +30,10 @@ export default defineManifest({
   content_scripts: [
     {
       all_frames: false,
-      matches: ['https://explorer.zksync.io/address/*'],
+      matches: [
+        `${MAINNET_EXPLORER_URL}/address/*`,
+        `${TESTNET_EXPLORER_URL}/address/*`,
+      ],
       js: ['src/content/index.ts'],
       run_at: 'document_end',
     },

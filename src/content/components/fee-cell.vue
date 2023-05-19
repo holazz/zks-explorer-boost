@@ -4,7 +4,7 @@ import { useTippy } from 'vue-tippy'
 
 const props = defineProps<{
   feeETH: number
-  feeUSD: string
+  feeUSD: number
 }>()
 
 const tokenRef = ref<HTMLSpanElement>()
